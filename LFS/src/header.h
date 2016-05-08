@@ -11,18 +11,19 @@
 #include<stdlib.h>
 #include<math.h>
 
-
 #define  dim 3 // matrix dimension
 #define SQRN(m, x) pow(x, 1.0/m)
 
 /*
  *
  */
-//void do_CIE(double X1, double Y1, double Z1, double Xn, double Yn, double Zn);
-void do_CIE();
+void   do_CIE();
+void   calc_CIE();
+void   calc_CIE_Lab();
+void   print_header();
 double do_sqr3(double a);
-double *get_array();
-void print_header();
+double get_param();
+
 
 
 #endif /* MYHEADER_H */

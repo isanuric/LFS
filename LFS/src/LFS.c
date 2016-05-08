@@ -5,29 +5,24 @@
  *      Author: ehsan
  */
 #include "header.h"
-
+double X1,  Y1,  Z1,  Xn,  Yn,  Zn;
 
 
 //void do_CIE(double X1, double Y1, double Z1, double Xn, double Yn, double Zn)
 void do_CIE()
 {
-	double *input_array;
-	double X1,  Y1,  Z1,  Xn,  Yn,  Zn;
-	double denominator;
+
+	print_header();		// print program header
+	get_param();		// get user parameters
+	calc_CIE();			// CIE Normalvalenzsystem
+	calc_CIE_Lab();		// CIE-L*a*b* - Farbraumsystem
+ }
+
+
+void calc_CIE()
+{
 	double x1, y1,z1;
-	double L_str, a_str, b_str, h_ab, C_str_ab;
-	double X1_Xn, Y1_Yn, Z1_Zn, limit;
-
-	print_header();
-	input_array =  get_array();
-	X1 = input_array[0];
-	Y1 = input_array[1];
-	Z1 = input_array[2];
-	Xn = input_array[3];
-	Yn = input_array[4];
-	Zn = input_array[5];
-
-	/*** CIE Normalvalenzsystem ***/
+	double denominator;
 	denominator = X1 + Y1 + Z1;
 	x1 = X1/denominator;
 	y1 = Y1/denominator;
@@ -36,9 +31,17 @@ void do_CIE()
 	printf("x     = %.3f \n", x1);
 	printf("y     = %.3f \n", y1);
 	printf("z     = %.3f \n", z1);
+	printf("x+y+z = %.3f \n", x1 + y1 + z1);
 	printf("\n");
+}
 
-	/*** CIE-L*a*b* - Farbraumsystem ***/
+/*
+ * CIE-L*a*b* - Farbraumsystem
+ */
+void calc_CIE_Lab()
+{
+	double L_str, a_str, b_str, h_ab, C_str_ab;
+	double X1_Xn, Y1_Yn, Z1_Zn, limit;
 	Y1_Yn = Y1/Yn;
 	X1_Xn = X1/Xn;
 	Z1_Zn = Z1/Zn;
@@ -68,7 +71,7 @@ void do_CIE()
 	printf("b*    = %.3f  \n", b_str);
 	printf("h_ab  = %.3f \n", h_ab);
 	printf("C*_ab = %.3f \n", C_str_ab);
- }
+}
 
 /*
  * dritte Wurzel
@@ -81,7 +84,7 @@ double do_sqr3(double a)
 /*
  * get the user parameters
  */
-double *get_array()
+double get_param()
 {
 	int var;
 	// get values
@@ -92,7 +95,12 @@ double *get_array()
 		scanf("%lf", &input_array[var]);
 	}
 	printf("\n");
-	return input_array;
+	X1 = input_array[0];
+	Y1 = input_array[1];
+	Z1 = input_array[2];
+	Xn = input_array[3];
+	Yn = input_array[4];
+	Zn = input_array[5];
 }
 
 /*
