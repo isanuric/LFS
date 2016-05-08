@@ -27,7 +27,7 @@ void do_CIE()
 	Yn = input_array[4];
 	Zn = input_array[5];
 
-	/*** CIE-Normalvalenzsystem ***/
+	/*** CIE Normalvalenzsystem ***/
 	denominator = X1 + Y1 + Z1;
 	x1 = X1/denominator;
 	y1 = Y1/denominator;
