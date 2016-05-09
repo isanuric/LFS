@@ -5,8 +5,9 @@
  *      Author: ehsan
  */
 #include "header.h"
-double X1,  Y1,  Z1,  Xn,  Yn,  Zn;
+double X1,  Y1,  Z1,  X2,  Y2,  Z2, Xn,  Yn,  Zn;
 double L_str;
+
 
 
 //void do_CIE(double X1, double Y1, double Z1, double Xn, double Yn, double Zn)
@@ -79,24 +80,31 @@ void calc_CIE_Lab()
 
 void calc_CIE_Luv()
 {
-	double *uv, *uv_n;
-	double u_ster, v_ster;
-	uv   = calc_uv(X1, Y1, Z1);
-	uv_n = calc_uv(Xn, Yn, Zn);
+	double u_str, v_str, delta_E;
+	mystruct uv   = calc_uv(X1, Y1, Z1);
+	mystruct uv_n = calc_uv(Xn, Yn, Zn);
+	u_str = 13.0 * L_str * (uv.u - uv_n.u);
+ 	v_str = 13.0 * L_str * (uv.v - uv_n.v);
+ 	delta_E =
 	printf("CIE-L*v*u* Farbraumsystem:\n");
-	printf("L*    = %.3f \n", L_str);
-	printf("u = %.3f \n", uv[0]);
-	printf("v = %.3f \n", uv[1]);
+	printf("L* = %.3f \n", L_str);
+	printf("u  = %.3f \n", uv.u);
+	printf("v  = %.3f \n", uv.v);
+	printf("u_n  = %.3f \n", uv_n.u);
+	printf("v_n  = %.3f \n", uv_n.v);
+	printf("u* = %.3f \n", u_str);
+	printf("v* = %.3f \n", v_str);
 }
 
-double *calc_uv(double X, double Y, double Z)
+mystruct calc_uv(double a, double b, double c)
 {
-	static double uv[2], denominator;
-	denominator = X + 15*Y + 3*Z;
-	uv[0] = 4*X1 / denominator;
-	uv[1] = 6*Y1 / denominator;
-	uv[1] *= 1.5;
-	return uv;
+	mystruct retval;
+	double denominator;
+	denominator = a + 15*b + 3*c;
+	retval.u = 4*a / denominator;
+	retval.v = 6*b / denominator;
+	retval.v *= 1.5;
+	return retval;
 }
 
 /*

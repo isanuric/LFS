@@ -14,6 +14,11 @@
 #define  dim 3 // matrix dimension
 #define SQRN(m, x) pow(x, 1.0/m)
 
+
+//
+typedef struct{ double u,v; }mystruct;
+
+
 /*
  *
  */
@@ -23,7 +28,8 @@ void   calc_CIE_Lab();
 void   print_header();
 double do_sqr3(double a);
 double get_param();
-double *calc_uv(double X, double Y, double Z);
+//double *calc_uv(double X, double Y, double Z);
+mystruct calc_uv(double a, double b, double c);
 
 
 #endif /* MYHEADER_H */
