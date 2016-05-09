@@ -23,7 +23,7 @@ void   calc_CIE_Lab();
 void   print_header();
 double do_sqr3(double a);
 double get_param();
-
+double *calc_uv(double X, double Y, double Z);
 
 
 #endif /* MYHEADER_H */

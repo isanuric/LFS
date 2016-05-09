@@ -6,6 +6,7 @@
  */
 #include "header.h"
 double X1,  Y1,  Z1,  Xn,  Yn,  Zn;
+double L_str;
 
 
 //void do_CIE(double X1, double Y1, double Z1, double Xn, double Yn, double Zn)
@@ -16,9 +17,12 @@ void do_CIE()
 	get_param();		// get user parameters
 	calc_CIE();			// CIE Normalvalenzsystem
 	calc_CIE_Lab();		// CIE-L*a*b* - Farbraumsystem
+	calc_CIE_Luv();		// CIE-L*v*u* System
  }
 
-
+/*
+ * CIE Normalvalenzsystem
+ */
 void calc_CIE()
 {
 	double x1, y1,z1;
@@ -40,7 +44,7 @@ void calc_CIE()
  */
 void calc_CIE_Lab()
 {
-	double L_str, a_str, b_str, h_ab, C_str_ab;
+	double a_str, b_str, h_ab, C_str_ab;
 	double X1_Xn, Y1_Yn, Z1_Zn, limit;
 	Y1_Yn = Y1/Yn;
 	X1_Xn = X1/Xn;
@@ -70,7 +74,29 @@ void calc_CIE_Lab()
 	printf("a*    = %.3f \n", a_str);
 	printf("b*    = %.3f  \n", b_str);
 	printf("h_ab  = %.3f \n", h_ab);
-	printf("C*_ab = %.3f \n", C_str_ab);
+	printf("C*_ab = %.3f \n\n", C_str_ab);
+}
+
+void calc_CIE_Luv()
+{
+	double *uv, *uv_n;
+	double u_ster, v_ster;
+	uv   = calc_uv(X1, Y1, Z1);
+	uv_n = calc_uv(Xn, Yn, Zn);
+	printf("CIE-L*v*u* Farbraumsystem:\n");
+	printf("L*    = %.3f \n", L_str);
+	printf("u = %.3f \n", uv[0]);
+	printf("v = %.3f \n", uv[1]);
+}
+
+double *calc_uv(double X, double Y, double Z)
+{
+	static double uv[2], denominator;
+	denominator = X + 15*Y + 3*Z;
+	uv[0] = 4*X1 / denominator;
+	uv[1] = 6*Y1 / denominator;
+	uv[1] *= 1.5;
+	return uv;
 }
 
 /*
