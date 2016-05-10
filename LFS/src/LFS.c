@@ -14,7 +14,7 @@ void do_CIE()
 {
 	double *inputs, *inputs2;
 	struct_Stars param_star1, param_star2, param_star3, param_star4;
-	print_header();		   // print program header
+	print_header();        // print program header
 	inputs = get_param();  // get user parameters
 	inputs2 = inputs + 3;  // get user parameters
 
@@ -105,13 +105,13 @@ struct_Stars calc_CIE_Luv(double *param)
 	struct_stars.a[1] = 13.0 * luv.l * (luv.v - luv_n.v);
 	struct_stars.a[2] = luv.l;
 	printf("CIE-L*v*u* Farbraumsystem for X=%.3lf, Y=%.3lf, Z=%.3lf\n", param[0], param[1], param[2]);
-	printf("L* = %.3f \n", luv.l);
-	printf("u  = %.3f \n", luv.u);
-	printf("v  = %.3f \n", luv.v);
-	printf("u_n  = %.3f \n", luv_n.u);
-	printf("v_n  = %.3f \n", luv_n.v);
-	printf("u* = %.3f \n", struct_stars.a[0]);
-	printf("v* = %.3f \n\n", struct_stars.a[1]);
+	printf("L*  = %.3f \n", luv.l);
+	printf("u   = %.3f \n", luv.u);
+	printf("v   = %.3f \n", luv.v);
+	printf("u_n = %.3f \n", luv_n.u);
+	printf("v_n = %.3f \n", luv_n.v);
+	printf("u*  = %.3f \n", struct_stars.a[0]);
+	printf("v*  = %.3f \n\n", struct_stars.a[1]);
 	return struct_stars;
 }
 
