@@ -34,16 +34,17 @@ void do_CIE()
  }
 
 /*
- * CIE Normalvalenzsystem
+ * CIE 1931 color space
+ * calculates the normalized values x, y and z
  */
 void calc_CIE(double X1, double Y1, double Z1)
 {
 	double x1, y1, z1;
 	double denominator;
 	denominator = X1 + Y1 + Z1;
-	x1 = X1/denominator;
-	y1 = Y1/denominator;
-	z1 = Z1/denominator;
+	x1 = X1/denominator;  // normalized value x
+	y1 = Y1/denominator;  // normalized value y
+	z1 = Z1/denominator;  // normalized value z
 	printf("CIE-Normalvalenzsystem for X=%.3lf, Y=%.3lf, Z=%.3lf\n", X1, Y1, Z1);
 	printf("x     = %.3f \n", x1);
 	printf("y     = %.3f \n", y1);
@@ -57,7 +58,7 @@ void calc_CIE(double X1, double Y1, double Z1)
  */
 struct_Stars calc_CIE_Lab(double *param)
 {
-	double  h_ab, C_str_ab;
+	double h_ab, C_str_ab;
 	double X1_Xn, Y1_Yn, Z1_Zn, limit;
 	struct_Stars struct_lab;
 	double lab[3];
@@ -155,7 +156,7 @@ double *get_param()
 	int var;
 	// get values
 	static double input_array[MAX];
-	printf("Please enter X Y Z Xn Yn Zn: ");
+	printf("Please enter X1 Y1 Z1 X2 Y2 Z2 Xn Yn Zn: ");
 
 	for (var = 0; var < MAX; ++var) {
 		scanf("%lf", &input_array[var]);
