@@ -28,9 +28,9 @@ void do_CIE()
 	calc_delta_e(param_star1.a, param_star2.a); // delta E
 
 	printf("***********************************************************\n");
-	param_star3 = calc_CIE_Luv(inputs);	        // CIE-L*v*u* System
-	param_star4 = calc_CIE_Luv(inputs2);		// CIE-L*v*u* System
-	calc_delta_e(param_star3.a, param_star4.a);	// delta E
+	param_star3 = calc_CIE_Luv(inputs);         // CIE-L*v*u* System
+	param_star4 = calc_CIE_Luv(inputs2);        // CIE-L*v*u* System
+	calc_delta_e(param_star3.a, param_star4.a); // delta E
  }
 
 /*
