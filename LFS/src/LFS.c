@@ -38,7 +38,7 @@ void do_CIE()
  */
 void calc_CIE(double X1, double Y1, double Z1)
 {
-	double x1, y1,z1;
+	double x1, y1, z1;
 	double denominator;
 	denominator = X1 + Y1 + Z1;
 	x1 = X1/denominator;
@@ -162,7 +162,6 @@ double *get_param()
 	}
 	printf("\n");
 	return input_array;
-
 }
 
 /*
