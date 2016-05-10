@@ -15,7 +15,7 @@
 #define SQRN(m, x) pow(x, 1.0/m)
 #define MAX 9
 double Xn,  Yn,  Zn;
-
+//int MAX = 9;
 
 //
 typedef struct{ double l, u, v, u_str, v_str; }struct_Luv;

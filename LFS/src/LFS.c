@@ -153,21 +153,33 @@ double do_sqr3(double a)
  */
 double *get_param()
 {
-	printf("open file:\n");
-	int var;
-	int count;
-	// get values
-	static double input_array[MAX];
-	//printf("Please enter X1 Y1 Z1 X2 Y2 Z2 Xn Yn Zn: ");
 
-    FILE * myFile;
+	int    var;
+	int    count;
+//	const int size = 30;
+	FILE * myFile;
+	// get values
+	//static double input_array[30] = {-1234};
+	static double input_array[MAX];
+
+//	printf("please enter the number of XYZ groups: ");
+//	scanf("%d", &MAX);
+//	MAX *= 3;
+	//scanf("%lf", &input_array[var]);
+
+//	do{
+//		count++;
+//		printf("%d: \n", input_array[count]);
+//	}while (input_array[count] != -1234);
+//	MAX = count;
+//	count = 0;
+
+	printf("open file:\n");
     myFile = fopen("lfs.txt", "r");
-	if(myFile==NULL)
-	{
+	if(myFile==NULL)	{
 		//printf("error!\n");
 		return 1;
 	}
-
 
 	for (var = 0; var < MAX; ++var) {
 		fscanf(myFile, "%lf", &input_array[var]);
@@ -178,8 +190,11 @@ double *get_param()
 			count = 0;
 		}
 
-		//scanf("%lf", &input_array[var]);
 	}
+//	MAX = sizeof(input_array) / sizeof(input_array[0]);
+//	printf("size of array: %d", MAX);
+
+	fclose(myFile);
 	printf("\n");
 	return input_array;
 }
