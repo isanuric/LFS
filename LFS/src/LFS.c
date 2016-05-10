@@ -153,26 +153,33 @@ double do_sqr3(double a)
  */
 double *get_param()
 {
-	printf("open file");
+	printf("open file:\n");
 	int var;
+	int count;
 	// get values
 	static double input_array[MAX];
 	//printf("Please enter X1 Y1 Z1 X2 Y2 Z2 Xn Yn Zn: ");
 
-    FILE * myFile = fopen("lfs.txt", "r");
+    FILE * myFile;
+    myFile = fopen("lfs.txt", "r");
 	if(myFile==NULL)
 	{
-		printf("error!");
+		//printf("error!\n");
 		return 1;
 	}
 
 
 	for (var = 0; var < MAX; ++var) {
 		fscanf(myFile, "%lf", &input_array[var]);
-		printf("%lf", input_array[var]);
+		printf("%.3lf\n", input_array[var]);
+		count++;
+		if(count == 3)		{
+			printf("\n");
+			count = 0;
+		}
+
 		//scanf("%lf", &input_array[var]);
 	}
-	printf("----> %lf", input_array[0]);
 	printf("\n");
 	return input_array;
 }
