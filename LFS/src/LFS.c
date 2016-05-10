@@ -1,18 +1,17 @@
 /*
- * matrix.c
+ * LFS.c
  *
  *  Created on: May 4, 2016
- *      Author: ehsan
+ *      Author: ehsan salmani
  */
 #include "header.h"
-double Xn,  Yn,  Zn;
+
 
 
 
 //void do_CIE(double X1, double Y1, double Z1, double Xn, double Yn, double Zn)
 void do_CIE()
 {
-	double X1, Y1, Z1;
 	double *inputs, *inputs2;
 	struct_Stars param_star1, param_star2, param_star3, param_star4;
 	print_header();		   // print program header
@@ -24,12 +23,12 @@ void do_CIE()
 	Zn = inputs[MAX-1];
 
 	calc_CIE(inputs[0], inputs[1], inputs[2]);		// CIE Normalvalenzsystem
-	param_star1 = calc_CIE_Lab(inputs);				// CIE-L*a*b* - Farbraumsystem
+	param_star1 = calc_CIE_Lab(inputs);	            // CIE-L*a*b* - Farbraumsystem
 	param_star2 = calc_CIE_Lab(inputs2);			// CIE-L*a*b* - Farbraumsystem
 	calc_delta_e(param_star1.a, param_star2.a);		// delta E
 
 	printf("***********************************************************\n");
-	param_star3 = calc_CIE_Luv(inputs);			// CIE-L*v*u* System
+	param_star3 = calc_CIE_Luv(inputs);	        // CIE-L*v*u* System
 	param_star4 = calc_CIE_Luv(inputs2);		// CIE-L*v*u* System
 	calc_delta_e(param_star3.a, param_star4.a);	// delta E
  }

@@ -14,6 +14,7 @@
 #define  dim 3 // matrix dimension
 #define SQRN(m, x) pow(x, 1.0/m)
 #define MAX 9
+double Xn,  Yn,  Zn;
 
 
 //
