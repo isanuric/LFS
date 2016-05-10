@@ -7,9 +7,9 @@
 #include "header.h"
 
 
-
-
-//void do_CIE(double X1, double Y1, double Z1, double Xn, double Yn, double Zn)
+/*
+ *
+ */
 void do_CIE()
 {
 	double *inputs, *inputs2;
@@ -22,10 +22,10 @@ void do_CIE()
 	Yn = inputs[MAX-2];
 	Zn = inputs[MAX-1];
 
-	calc_CIE(inputs[0], inputs[1], inputs[2]);		// CIE Normalvalenzsystem
-	param_star1 = calc_CIE_Lab(inputs);	            // CIE-L*a*b* - Farbraumsystem
-	param_star2 = calc_CIE_Lab(inputs2);			// CIE-L*a*b* - Farbraumsystem
-	calc_delta_e(param_star1.a, param_star2.a);		// delta E
+	calc_CIE(inputs[0], inputs[1], inputs[2]);  // CIE Normalvalenzsystem
+	param_star1 = calc_CIE_Lab(inputs);         // CIE-L*a*b* - Farbraumsystem
+	param_star2 = calc_CIE_Lab(inputs2);        // CIE-L*a*b* - Farbraumsystem
+	calc_delta_e(param_star1.a, param_star2.a); // delta E
 
 	printf("***********************************************************\n");
 	param_star3 = calc_CIE_Luv(inputs);	        // CIE-L*v*u* System
