@@ -16,7 +16,7 @@ void do_CIE()
 	struct_Stars param_star1, param_star2, param_star3, param_star4;
 	int num_of_groups = MAX /XYZ;
 	int group = 0;
-	int next_three_params;
+	int each_data_group;
 	int j;
 	struct_Stars st_arr_results[2];
 
@@ -31,8 +31,8 @@ void do_CIE()
 	Zn = input_datas[MAX-1];
 
 
-	for ( next_three_params = 0; next_three_params < MAX/XYZ-1; next_three_params++) {
-		for ( j = next_three_params; j < MAX-XYZ-3; j+=XYZ) {
+	for ( each_data_group = 0; each_data_group < MAX/XYZ-1; each_data_group++) {
+		for ( j = each_data_group; j < MAX-XYZ-3; j+=XYZ) {
 			st_arr_results[group] = calc_CIE_Lab(input_datas + j);
 			group++;
 			if(group % 2 == 0){
