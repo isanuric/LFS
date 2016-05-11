@@ -31,8 +31,8 @@ void do_CIE()
 	Zn = input_datas[MAX-1];
 
 
-	for ( each_data_group = 0; each_data_group < MAX/XYZ-1; each_data_group++) {
-		for ( j = each_data_group; j < MAX-XYZ-3; j+=XYZ) {
+	for ( each_data_group = 0; each_data_group < MAX-XYZ-3; each_data_group+=XYZ) {
+		for ( j = each_data_group; j < MAX-XYZ; j+=XYZ) {
 			st_arr_results[group] = calc_CIE_Lab(input_datas + j);
 			group++;
 			if(group % 2 == 0){
