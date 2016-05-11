@@ -12,25 +12,68 @@
  */
 void do_CIE()
 {
-	double *inputs, *inputs2;
+	double *input_datas, *inputs2;
 	struct_Stars param_star1, param_star2, param_star3, param_star4;
+	int num_of_groups = MAX /XYZ;
+	int group = 0;
+	int next_three_params;
+	int j;
+	struct_Stars st_arr_results[2];
+
+
+
 	print_header();        // print program header
-	inputs = get_param();  // get user parameters
-	inputs2 = inputs + 3;  // get user parameters
+	input_datas  = get_param(); // get user parameters
+	inputs2 = input_datas + 3;  // get user parameters
 
-	Xn = inputs[MAX-3];
-	Yn = inputs[MAX-2];
-	Zn = inputs[MAX-1];
+	Xn = input_datas[MAX-3];
+	Yn = input_datas[MAX-2];
+	Zn = input_datas[MAX-1];
 
-	calc_CIE(inputs[0], inputs[1], inputs[2]);  // CIE Normalvalenzsystem
-	param_star1 = calc_CIE_Lab(inputs);         // CIE-L*a*b* - Farbraumsystem
-	param_star2 = calc_CIE_Lab(inputs2);        // CIE-L*a*b* - Farbraumsystem
-	calc_delta_e(param_star1.a, param_star2.a); // delta E
+
+	for ( next_three_params = 0; next_three_params < MAX/XYZ-1; next_three_params++) {
+		for ( j = next_three_params; j < MAX-XYZ-3; j+=XYZ) {
+			st_arr_results[group] = calc_CIE_Lab(input_datas + j);
+			group++;
+			if(group % 2 == 0){
+				calc_delta_e( st_arr_results[0].arr, st_arr_results[1].arr);
+				group = 0;
+			}
+		}
+
+	}
+
+//	calc_CIE(input_datas[0], input_datas[1], input_datas[2]);  // CIE Normalvalenzsystem
+//	param_star1 = calc_CIE_Lab(input_datas);         // CIE-L*a*b* - Farbraumsystem
+//	param_star2 = calc_CIE_Lab(inputs2);        // CIE-L*a*b* - Farbraumsystem
+//	calc_delta_e(param_star1.arr, param_star2.arr); // delta E
+//
+//	CIE-Normalvalenzsystem for X=124.900, Y=61.432, Z=30.500
+//	x     = 0.576
+//	y     = 0.283
+//	z     = 0.141
+//	x+y+z = 1.000
+//
+//	CIE-L*a*b* Farbraumsystem for X=124.900, Y=61.432, Z=30.500
+//	L*    = 82.610
+//	a*    = 96.788
+//	b*    = -19.935
+//	h_ab  = -11.638
+//	C*_ab = 216.833
+//
+//	CIE-L*a*b* Farbraumsystem for X=135.900, Y=59.309, Z=20.370
+//	L*    = 81.461
+//	a*    = 116.632
+//	b*    = 1.997
+//	h_ab  = 0.981
+//	C*_ab = 216.833
+//
+//	ΔE = 29.600
 
 	printf("***********************************************************\n");
-	param_star3 = calc_CIE_Luv(inputs);         // CIE-L*v*u* System
+	param_star3 = calc_CIE_Luv(input_datas);         // CIE-L*v*u* System
 	param_star4 = calc_CIE_Luv(inputs2);        // CIE-L*v*u* System
-	calc_delta_e(param_star3.a, param_star4.a); // delta E
+	calc_delta_e(param_star3.arr, param_star4.arr); // delta E
  }
 
 /*
@@ -66,19 +109,19 @@ struct_Stars calc_CIE_Lab(double *param)
 	Y1_Yn = param[1]/Yn;
 	Z1_Zn = param[2]/Zn;
 	limit = pow( 6.0/29, 3);  // 0.008856
-	struct_lab.a[2] = 116 * SQRN(3, Y1_Yn) - 16;
+	struct_lab.arr[2] = 116 * SQRN(3, Y1_Yn) - 16;
 	// calculate a* and b*:
 	if(X1_Xn > limit || Y1_Yn > limit)	{
-		struct_lab.a[0] = 500 * ( do_sqr3(X1_Xn) - do_sqr3(Y1_Yn) );
-		struct_lab.a[1] = 200 * ( do_sqr3(Y1_Yn) - do_sqr3(Z1_Zn) );
+		struct_lab.arr[0] = 500 * ( do_sqr3(X1_Xn) - do_sqr3(Y1_Yn) );
+		struct_lab.arr[1] = 200 * ( do_sqr3(Y1_Yn) - do_sqr3(Z1_Zn) );
 	}else{
-		struct_lab.a[0] = 200 * ( (841/108) * ( X1_Xn - Y1_Yn ) );
-		struct_lab.a[1] = 200 * ( (841/108) * ( Y1_Yn - Z1_Zn ) );
+		struct_lab.arr[0] = 200 * ( (841/108) * ( X1_Xn - Y1_Yn ) );
+		struct_lab.arr[1] = 200 * ( (841/108) * ( Y1_Yn - Z1_Zn ) );
 	}
 	// calculate h_ab
-	h_ab = atan(struct_lab.a[1]/struct_lab.a[0]) * (180 / M_PI);  // radians into degree: (180 / M_PI)
+	h_ab = atan(struct_lab.arr[1]/struct_lab.arr[0]) * (180 / M_PI);  // radians into degree: (180 / M_PI)
 	if(lab[0] < 0)	{
-		if(struct_lab.a[1] > 0)
+		if(struct_lab.arr[1] > 0)
 			h_ab += 180;
 		else
 			h_ab -= 180;
@@ -86,9 +129,9 @@ struct_Stars calc_CIE_Lab(double *param)
 	// C*_ab
 	C_str_ab = sqrt( ( pow(lab[0],2) + pow(lab[1], 2) ) );
 	printf("CIE-L*a*b* Farbraumsystem for X=%.3lf, Y=%.3lf, Z=%.3lf\n", param[0], param[1], param[2]);
-	printf("L*    = %.3f \n", struct_lab.a[2]);
-	printf("a*    = %.3f \n", struct_lab.a[0]);
-	printf("b*    = %.3f  \n", struct_lab.a[1]);
+	printf("L*    = %.3f \n", struct_lab.arr[2]);
+	printf("a*    = %.3f \n", struct_lab.arr[0]);
+	printf("b*    = %.3f  \n", struct_lab.arr[1]);
 	printf("h_ab  = %.3f \n", h_ab);
 	printf("C*_ab = %.3f \n\n", C_str_ab);
 	return struct_lab;
@@ -102,17 +145,17 @@ struct_Stars calc_CIE_Luv(double *param)
 	struct_Stars struct_stars;
 	struct_Luv luv    = calc_uv(param[0], param[1], param[2]);
 	struct_Luv luv_n  = calc_uv(Xn,  Yn,  Zn);
-	struct_stars.a[0] = 13.0 * luv.l * (luv.u - luv_n.u);
-	struct_stars.a[1] = 13.0 * luv.l * (luv.v - luv_n.v);
-	struct_stars.a[2] = luv.l;
+	struct_stars.arr[0] = 13.0 * luv.l * (luv.u - luv_n.u);
+	struct_stars.arr[1] = 13.0 * luv.l * (luv.v - luv_n.v);
+	struct_stars.arr[2] = luv.l;
 	printf("CIE-L*v*u* Farbraumsystem for X=%.3lf, Y=%.3lf, Z=%.3lf\n", param[0], param[1], param[2]);
 	printf("L*  = %.3f \n", luv.l);
 	printf("u   = %.3f \n", luv.u);
 	printf("v   = %.3f \n", luv.v);
 	printf("u_n = %.3f \n", luv_n.u);
 	printf("v_n = %.3f \n", luv_n.v);
-	printf("u*  = %.3f \n", struct_stars.a[0]);
-	printf("v*  = %.3f \n\n", struct_stars.a[1]);
+	printf("u*  = %.3f \n", struct_stars.arr[0]);
+	printf("v*  = %.3f \n\n", struct_stars.arr[1]);
 	return struct_stars;
 }
 

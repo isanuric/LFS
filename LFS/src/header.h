@@ -14,12 +14,13 @@
 #define  dim 3 // matrix dimension
 #define SQRN(m, x) pow(x, 1.0/m)
 #define MAX 9
+#define XYZ 3
 double Xn,  Yn,  Zn;
 //int MAX = 9;
 
 //
 typedef struct{ double l, u, v, u_str, v_str; }struct_Luv;
-typedef struct{ double a[3]; }struct_Stars;
+typedef struct{ double arr[3]; }struct_Stars;
 
 
 /*
