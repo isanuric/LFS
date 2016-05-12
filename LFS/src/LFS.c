@@ -6,79 +6,75 @@
  */
 #include "header.h"
 int size;
+int print_titel = 1;
+int group = 0;
 
-/*
- * print titel for color systems
- */
-void print_titel(char titel)
-{
-	// TODO
-}
 
 /*
  *
  */
 void do_CIE()
 {
-	double *input_datas, *inputs2, **arr;
-	struct_Stars param_star1, param_star2, param_star3, param_star4;
-	int print_titel = 1;
-	int group = 0;
 	int i;
-	int j;
+	double **arr;
 
-	struct_Stars st_arr_results[2];
+	print_header();    // print program header
+	arr = read_file(); // get user parameters
+	Xn  = arr[size-1][0];
+	Yn  = arr[size-1][1];
+	Zn  = arr[size-1][2];
 
-	print_header();     // print program header
-	arr  = read_file(); // get user parameters
-
-	Xn = arr[size-1][0];
-	Yn = arr[size-1][1];
-	Zn = arr[size-1][2];
-
-	/* CIE-Normalvalenzsystem */
-	for ( i = 0; i < size; ++i) {
-		if(print_titel)		{
-			printf("***** CIE-Normalvalenzsystem *****\n");
-			print_titel = 0;
-		}
-		calc_CIE(arr[i]);
-	}
-	print_titel = 1;
-
-	/* CIE-L*a*b* Farbraumsystem */
-	for ( j = 0; j < size-1 ; j++) {
-		if(print_titel)		{
-			printf("***** CIE-L*a*b* Farbraumsystem *****\n");
-			print_titel = 0;
-		}
-		st_arr_results[group] = calc_CIE_Lab(arr[j]);
-		group++;
-		if(group % 2 == 0){
-			calc_delta_e( st_arr_results[0].arr, st_arr_results[1].arr);
-			group = 0;
-		}
-	}
-	print_titel = 1;
-
-	/*  */
-	for ( i = 0; i < size-1; ++i) {
-		if(print_titel)		{
-			printf("***** CIE-L*v*u* Farbraumsystem *****\n");
-			print_titel = 0;
-		}
-		st_arr_results[group] = calc_CIE_Luv(arr[i]);
-		group++;
-		if(group % 2 == 0){
-			calc_delta_e( st_arr_results[0].arr, st_arr_results[1].arr);
-			group = 0;
-		}
-	}
-//	printf("***********************************************************\n");
-//	st_arr_results[group] = calc_CIE_Luv(arr[i]);         // CIE-L*v*u* System
-//	param_star4 = calc_CIE_Luv(inputs2);        // CIE-L*v*u* System
-//	calc_delta_e(param_star3.arr, param_star4.arr); // delta E
+	for ( i = 0; i < 3; ++i)
+		execute_color_system(arr, i);
  }
+
+/*
+ * execute color systems
+ */
+void execute_color_system(double **arr, int func_numb)
+{
+	struct_Stars st_arr_results[2];
+	int i;
+
+	for ( i = 0; i < size-1 ; i++) {
+		switch(func_numb)
+		{
+			case 0: /* CIE-Normalvalenzsystem */
+				for ( i = 0; i < size; ++i) {
+					if(print_titel)		{
+						printf("***** CIE-Normalvalenzsystem *****\n");
+						print_titel = 0;
+					}
+					calc_CIE(arr[i]);
+				}
+				print_titel = 1;
+				break;
+
+			case 1: /* CIE-L*a*b* Farbraumsystem */
+				if(print_titel)		{
+					printf("***** CIE-L*a*b* Farbraumsystem *****\n");
+					print_titel = 0;
+				}
+				st_arr_results[group] = calc_CIE_Lab(arr[i]);
+				group++;
+				break;
+
+			case 2: /* CIE-L*v*u* Farbraumsystem */
+				if(print_titel)		{
+					printf("***** CIE-L*v*u* Farbraumsystem *****\n");
+					print_titel = 0;
+				}
+				st_arr_results[group] = calc_CIE_Luv(arr[i]);
+				group++;
+				break;
+		}
+		if(group % 2 == 0 && (func_numb != 0) ){
+			calc_delta_e( st_arr_results[0].arr, st_arr_results[1].arr);
+			group = 0;
+		}
+	}
+	print_titel = 1;
+}
 
 /*
  * CIE 1931 color space
@@ -175,9 +171,13 @@ struct_Stars calc_CIE_Luv(double *param)
  * delta E
  */
 void calc_delta_e(double *param, double *param2)
-{	double delta_e;
-	delta_e =  sqrt( pow((param[2]-param2[2]), 2) + pow((param[1]-param2[1]), 2) + pow((param[0]-param2[0]), 2) );
-	printf("ΔE = %.3f \n\n", delta_e);
+{
+	double delta_e;
+	delta_e =  sqrt( pow((param[2]-param2[2]), 2) +
+			         pow((param[1]-param2[1]), 2) +
+					 pow((param[0]-param2[0]), 2) );
+	printf("ΔE = %.3f \n", delta_e);
+	printf("***********************\n\n");
 }
 
 /*
