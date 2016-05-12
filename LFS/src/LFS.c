@@ -6,7 +6,8 @@
  */
 #include "header.h"
 int size;
-int print_titel = 1;
+int b_print_titel = 1;
+int b_create_base = 1;
 int group = 0;
 
 
@@ -16,54 +17,52 @@ int group = 0;
 void do_CIE()
 {
 	int i;
-	double **arr;
-
 	print_header();    // print program header
-	arr = read_file(); // get user parameters
-	Xn  = arr[size-1][0];
-	Yn  = arr[size-1][1];
-	Zn  = arr[size-1][2];
-
 	for ( i = 0; i < 3; ++i)
-		execute_color_system(arr, i);
+		execute_color_system(i);
  }
 
 /*
  * execute color systems
  */
-void execute_color_system(double **arr, int func_numb)
+void execute_color_system(int func_numb)
 {
 	struct_Stars st_arr_results[2];
 	int i;
+	int compare=1;
+	double **arr;
+
+	if(b_create_base){
+		arr = read_file(); // get user parameters
+		Xn  = arr[size-1][0];
+		Yn  = arr[size-1][1];
+		Zn  = arr[size-1][2];
+		b_create_base = 0;
+	}
 
 	for ( i = 0; i < size-1 ; i++) {
+
+		if(group == 0 && (func_numb != 0) && b_print_titel !=1 )
+			printf("Group %d:\n", compare++);
+
 		switch(func_numb)
 		{
 			case 0: /* CIE-Normalvalenzsystem */
-				for ( i = 0; i < size; ++i) {
-					if(print_titel)		{
-						printf("***** CIE-Normalvalenzsystem *****\n");
-						print_titel = 0;
-					}
-					calc_CIE(arr[i]);
-				}
-				print_titel = 1;
+				if(b_print_titel)
+					print_sys_title(func_numb);
+				calc_CIE(arr[i]);
 				break;
 
 			case 1: /* CIE-L*a*b* Farbraumsystem */
-				if(print_titel)		{
-					printf("***** CIE-L*a*b* Farbraumsystem *****\n");
-					print_titel = 0;
-				}
+				if(b_print_titel)
+					print_sys_title(func_numb);
 				st_arr_results[group] = calc_CIE_Lab(arr[i]);
 				group++;
 				break;
 
 			case 2: /* CIE-L*v*u* Farbraumsystem */
-				if(print_titel)		{
-					printf("***** CIE-L*v*u* Farbraumsystem *****\n");
-					print_titel = 0;
-				}
+				if(b_print_titel)
+					print_sys_title(func_numb);
 				st_arr_results[group] = calc_CIE_Luv(arr[i]);
 				group++;
 				break;
@@ -71,9 +70,10 @@ void execute_color_system(double **arr, int func_numb)
 		if(group % 2 == 0 && (func_numb != 0) ){
 			calc_delta_e( st_arr_results[0].arr, st_arr_results[1].arr);
 			group = 0;
+
 		}
-	}
-	print_titel = 1;
+
+	}b_print_titel = 1;
 }
 
 /*
@@ -300,11 +300,32 @@ double **read_file()
  * print the program header in terminal
  */
 void print_header(){
+	printf("***********************************************************\n");
 	printf("***********************************************************\n"
 			"			   LFS\n"
 			" This program calculates the CIE and CIE-L*a*b* parameters\n"
 			"\n"
-			"                   created by: isan slam\n"
+			"                created by: ehsan salmani\n"
 			"***********************************************************\n");
+	printf("***********************************************************\n");
 }
 
+void print_sys_title(int system) {
+	char *title;
+	switch (system)
+	{
+		case 0:
+			title = "CIE-Normalvalenzsystem";
+			break;
+		case 1:
+			title = "CIE-L*a*b* Farbraumsystem";
+			break;
+		case 2:
+			title = "CIE-L*v*u* Farbraumsystem";
+			break;
+	}
+	printf("***********************************************************\n");
+	printf("                  %s\n", title);
+	printf("***********************************************************\n");
+	b_print_titel = 0;
+}
