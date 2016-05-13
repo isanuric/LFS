@@ -5,12 +5,12 @@
  *      Author: ehsan salmani
  */
 #include "header.h"
-int size = 0;
-int b_print_titel = 1;
-int b_create_base = 1;
-int group = 0
-		;
 
+/* global variables */
+int size = 0;			// size of data array
+int b_print_titel = 1;	// print the title of color system
+int b_create_base = 1;  // the last 3 values in file: Xn Yn Zn
+int group = 0;
 
 /*
  *
@@ -18,8 +18,8 @@ int group = 0
 void do_CIE()
 {
 	int i;
-	print_header();    // print program header
-	for ( i = 0; i < 3; ++i)
+	print_header();    			// print program header
+	for ( i = 0; i < 3; ++i)    // execute automated the color systems
 		execute_color_system(i);
  }
 
@@ -105,7 +105,6 @@ void calc_CIE(double *param)
  */
 struct_Stars calc_CIE_Lab(double *param)
 {
-	//printf("----------------------> %lf \n", param[0]);
 	double h_ab, C_str_ab;
 	double X1_Xn, Y1_Yn, Z1_Zn, limit;
 	struct_Stars struct_lab;
@@ -120,7 +119,6 @@ struct_Stars calc_CIE_Lab(double *param)
 	if(X1_Xn > limit || Y1_Yn > limit)	{
 		struct_lab.arr[0] = 500 * ( do_sqr3(X1_Xn) - do_sqr3(Y1_Yn) ); // a
 		struct_lab.arr[1] = 200 * ( do_sqr3(Y1_Yn) - do_sqr3(Z1_Zn) ); // b
-		b                 = 200 * ( do_sqr3(Y1_Yn) - do_sqr3(Z1_Zn) ); // b
 	}else{
 		struct_lab.arr[0] = 200 * ( (841/108) * ( X1_Xn - Y1_Yn ) ); // a
 		struct_lab.arr[1] = 200 * ( (841/108) * ( Y1_Yn - Z1_Zn ) ); // b
@@ -179,7 +177,6 @@ void calc_delta_e(double *param, double *param2)
 			         pow((param[1]-param2[1]), 2) +
 					 pow((param[0]-param2[0]), 2) );
 	printf("-> ΔE  = %.3f", delta_e);
-	//printf("***********************\n\n");
 }
 
 /*
@@ -261,8 +258,6 @@ double **read_file()
 		printf("\n");
 	}
 	printf("\n");
-
-
 	return arr_input;
 }
 
