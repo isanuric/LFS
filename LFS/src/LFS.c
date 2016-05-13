@@ -69,6 +69,7 @@ void execute_color_system(int func_numb)
 				group++;
 				break;
 		}
+		/* after each two CIE calculation, calculate ΔE */
 		if(group % 2 == 0 && (func_numb != 0) ){
 			calc_delta_e( st_arr_results[0].arr, st_arr_results[1].arr);
 			group = 0;
@@ -114,8 +115,8 @@ struct_Stars calc_CIE_Lab(double *param)
 	Y1_Yn = param[1]/Yn;
 	Z1_Zn = param[2]/Zn;
 	limit = pow( 6.0/29, 3);  // 0.008856
-	struct_lab.arr[2] = 116 * SQRN(3, Y1_Yn) - 16;
-	// calculate a* and b*:
+	struct_lab.arr[2] = 116 * SQRN(3, Y1_Yn) - 16; // non-linear relations for L*
+	// relations for a* and b*:
 	if(X1_Xn > limit || Y1_Yn > limit)	{
 		struct_lab.arr[0] = 500 * ( do_sqr3(X1_Xn) - do_sqr3(Y1_Yn) ); // a
 		struct_lab.arr[1] = 200 * ( do_sqr3(Y1_Yn) - do_sqr3(Z1_Zn) ); // b
@@ -133,8 +134,9 @@ struct_Stars calc_CIE_Lab(double *param)
 			h_ab -= 180;
 	}
 
-	// C*_ab
+	// C*: Cylindrical representation
 	C_str_ab = sqrt( ( pow(lab[0],2) + pow(lab[1], 2) ) );
+
 	printf(" X=%.3lf, Y=%.3lf, Z=%.3lf\n", param[0], param[1], param[2]);
 	printf("L*    = %.3f \n", struct_lab.arr[2]);
 	printf("a*    = %.3f \n", struct_lab.arr[0]);
@@ -146,6 +148,9 @@ struct_Stars calc_CIE_Lab(double *param)
 
 /*
  * CIE Luv
+ * note: CIELUV is based on CIEUVW and is another
+ * 		 attempt to define an encoding with uniformity
+ *  	 in the perceptibility of color differences
  */
 struct_Stars calc_CIE_Luv(double *param)
 {
@@ -181,6 +186,7 @@ void calc_delta_e(double *param, double *param2)
 
 /*
  * calculate u and v
+ * note: The transformation from (u′, v′) to (x, y)
  */
 struct_Luv calc_uv(double a, double b, double c)
 {
