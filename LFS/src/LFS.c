@@ -5,10 +5,11 @@
  *      Author: ehsan salmani
  */
 #include "header.h"
-int size;
+int size = 0;
 int b_print_titel = 1;
 int b_create_base = 1;
-int group = 0;
+int group = 0
+		;
 
 
 /*
@@ -34,6 +35,7 @@ void execute_color_system(int func_numb)
 
 	if(b_create_base){
 		arr = read_file(); // get user parameters
+		//arr = get_param(); // get user parameters
 		Xn  = arr[size-1][0];
 		Yn  = arr[size-1][1];
 		Zn  = arr[size-1][2];
@@ -43,7 +45,7 @@ void execute_color_system(int func_numb)
 	for ( i = 0; i < size-1 ; i++) {
 
 		if(group == 0 && (func_numb != 0) && b_print_titel !=1 )
-			printf("Group %d:\n", compare++);
+			printf("\n\nGroup %d:", compare++);
 
 		switch(func_numb)
 		{
@@ -108,20 +110,20 @@ struct_Stars calc_CIE_Lab(double *param)
 	double X1_Xn, Y1_Yn, Z1_Zn, limit;
 	struct_Stars struct_lab;
 	double lab[3];
-
+	double b;
 	X1_Xn = param[0]/Xn;
 	Y1_Yn = param[1]/Yn;
 	Z1_Zn = param[2]/Zn;
 	limit = pow( 6.0/29, 3);  // 0.008856
 	struct_lab.arr[2] = 116 * SQRN(3, Y1_Yn) - 16;
-
 	// calculate a* and b*:
 	if(X1_Xn > limit || Y1_Yn > limit)	{
-		struct_lab.arr[0] = 500 * ( do_sqr3(X1_Xn) - do_sqr3(Y1_Yn) );
-		struct_lab.arr[1] = 200 * ( do_sqr3(Y1_Yn) - do_sqr3(Z1_Zn) );
+		struct_lab.arr[0] = 500 * ( do_sqr3(X1_Xn) - do_sqr3(Y1_Yn) ); // a
+		struct_lab.arr[1] = 200 * ( do_sqr3(Y1_Yn) - do_sqr3(Z1_Zn) ); // b
+		b                 = 200 * ( do_sqr3(Y1_Yn) - do_sqr3(Z1_Zn) ); // b
 	}else{
-		struct_lab.arr[0] = 200 * ( (841/108) * ( X1_Xn - Y1_Yn ) );
-		struct_lab.arr[1] = 200 * ( (841/108) * ( Y1_Yn - Z1_Zn ) );
+		struct_lab.arr[0] = 200 * ( (841/108) * ( X1_Xn - Y1_Yn ) ); // a
+		struct_lab.arr[1] = 200 * ( (841/108) * ( Y1_Yn - Z1_Zn ) ); // b
 	}
 
 	// calculate h_ab
@@ -135,12 +137,12 @@ struct_Stars calc_CIE_Lab(double *param)
 
 	// C*_ab
 	C_str_ab = sqrt( ( pow(lab[0],2) + pow(lab[1], 2) ) );
-	printf("X=%.3lf, Y=%.3lf, Z=%.3lf\n", param[0], param[1], param[2]);
+	printf(" X=%.3lf, Y=%.3lf, Z=%.3lf\n", param[0], param[1], param[2]);
 	printf("L*    = %.3f \n", struct_lab.arr[2]);
 	printf("a*    = %.3f \n", struct_lab.arr[0]);
 	printf("b*    = %.3f  \n", struct_lab.arr[1]);
 	printf("h_ab  = %.3f \n", h_ab);
-	printf("C*_ab = %.3f \n\n", C_str_ab);
+	printf("C*_ab = %.3f \n", C_str_ab);
 	return struct_lab;
 }
 
@@ -156,14 +158,14 @@ struct_Stars calc_CIE_Luv(double *param)
 	struct_stars.arr[0] = 13.0 * luv.l * (luv.u - luv_n.u);
 	struct_stars.arr[1] = 13.0 * luv.l * (luv.v - luv_n.v);
 	struct_stars.arr[2] = luv.l;
-	printf("X=%.3lf, Y=%.3lf, Z=%.3lf\n", param[0], param[1], param[2]);
+	printf(" X=%.3lf, Y=%.3lf, Z=%.3lf\n", param[0], param[1], param[2]);
 	printf("L*  = %.3f \n", luv.l);
 	printf("u   = %.3f \n", luv.u);
 	printf("v   = %.3f \n", luv.v);
 	printf("u_n = %.3f \n", luv_n.u);
 	printf("v_n = %.3f \n", luv_n.v);
 	printf("u*  = %.3f \n", struct_stars.arr[0]);
-	printf("v*  = %.3f \n\n", struct_stars.arr[1]);
+	printf("v*  = %.3f \n", struct_stars.arr[1]);
 	return struct_stars;
 }
 
@@ -176,8 +178,8 @@ void calc_delta_e(double *param, double *param2)
 	delta_e =  sqrt( pow((param[2]-param2[2]), 2) +
 			         pow((param[1]-param2[1]), 2) +
 					 pow((param[0]-param2[0]), 2) );
-	printf("ΔE = %.3f \n", delta_e);
-	printf("***********************\n\n");
+	printf("-> ΔE  = %.3f", delta_e);
+	//printf("***********************\n\n");
 }
 
 /*
@@ -203,43 +205,6 @@ double do_sqr3(double a)
 	return SQRN(3, a);
 }
 
-/*
- * get the user parameters
- */
-double *get_param()
-{
-	int    var;
-	int    count;
-	FILE * myFile;
-	// get values
-	static double input_array[MAX];
-
-//	printf("please enter the number of XYZ groups: ");
-//	scanf("%d", &MAX);
-
-	printf("open file:\n");
-    myFile = fopen("lfs.txt", "r");
-	if(myFile==NULL)	{
-		//printf("error!\n");
-		return 1;
-	}
-
-	for (var = 0; var < MAX; ++var) {
-		fscanf(myFile, "%lf", &input_array[var]);
-		printf("%.3lf\n", input_array[var]);
-		count++;
-		if(count == 3)		{
-			printf("\n");
-			count = 0;
-		}
-	}
-//	MAX = sizeof(input_array) / sizeof(input_array[0]);
-//	printf("size of array: %d", MAX);
-
-	fclose(myFile);
-	printf("\n");
-	return input_array;
-}
 
 /*
  * read file in a dynamic two dimensional array
@@ -250,11 +215,13 @@ double **read_file()
 	int j = 0;
 	int var;
 	int row;
-	double d;
 	int count=0;
+	double d;
 	static double **arr_input;
-	FILE *file = fopen("lfs.txt", "r");
+	FILE *file;
+	FILE *file2;
 
+	file = fopen("lfs.txt", "r");
 	if(file==NULL)	{
 		fprintf(stderr, "error! unable to open file.\n");
 		return -1;
@@ -265,11 +232,12 @@ double **read_file()
 		count++;
 		if(count%3 == 0) size++;
 	}
+	fclose(file);
 
 	/* dynamic array allocation */
-	arr_input = malloc(size*sizeof(int*));
+	arr_input = malloc(size*sizeof(double*));
 	for (row = 0; row < size; ++row)
-		arr_input[row] = malloc(3*sizeof(int));
+		arr_input[row] = malloc(3*sizeof(double));
 
 	/* add XYZ parametes into array*/
 	file = fopen("lfs.txt", "r");
@@ -280,19 +248,21 @@ double **read_file()
 		if(j == 3){
 			i++;
 			j=0;
+			printf("\n");
 		}
 	}
+	fclose(file);
 
 	printf("open file:\n");
 	for ( var = 0; var < size; ++var){
 		printf("XYZ %d: ", var);
-		for ( j = 0; j < column; ++j)
+		for ( j = 0; j < 3; ++j)
 					printf("%.3lf ", arr_input[var][j]);
 		printf("\n");
 	}
 	printf("\n");
 
-	fclose(file);
+
 	return arr_input;
 }
 
@@ -324,7 +294,7 @@ void print_sys_title(int system) {
 			title = "CIE-L*v*u* Farbraumsystem";
 			break;
 	}
-	printf("***********************************************************\n");
+	printf("\n\n***********************************************************\n");
 	printf("                  %s\n", title);
 	printf("***********************************************************\n");
 	b_print_titel = 0;
