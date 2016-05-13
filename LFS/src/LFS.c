@@ -29,7 +29,7 @@ void do_CIE()
 void execute_color_system(int func_numb)
 {
 	struct_Stars st_arr_results[2];
-	int i;
+	int j, i;
 	int compare=1;
 	double **arr;
 
@@ -41,40 +41,42 @@ void execute_color_system(int func_numb)
 		b_create_base = 0;
 	}
 
-	for ( i = 0; i < size-1 ; i++) {
-		// print the group number
-		if(group == 0 && (func_numb != 0) && b_print_titel !=1 )
-			printf("\n\nGroup %d:", compare++);
+	for ( j = 0; j < size-1; ++j) {
+		for ( i = j; i < size-1 ; i++) {
+			// print the group number
+			if(group == 0 && (func_numb != 0) && b_print_titel !=1 )
+				printf("\n\nGroup %d:", compare++);
 
-		// call the functions to calculate various color systems
-		switch(func_numb)
-		{
-			case 0: /* CIE-Normalvalenzsystem */
-				if(b_print_titel)
-					print_sys_title(func_numb);
-				calc_CIE(arr[i]);
-				break;
+			// call the functions to calculate various color systems
+			switch(func_numb)
+			{
+				case 0: /* CIE-Normalvalenzsystem */
+					if(b_print_titel)
+						print_sys_title(func_numb);
+					calc_CIE(arr[i]);
+					break;
 
-			case 1: /* CIE-L*a*b* Farbraumsystem */
-				if(b_print_titel)
-					print_sys_title(func_numb);
-				// run CLELAB and add the result to result array
-				st_arr_results[group] = calc_CIE_Lab(arr[i]);
-				group++;
-				break;
+				case 1: /* CIE-L*a*b* Farbraumsystem */
+					if(b_print_titel)
+						print_sys_title(func_numb);
+					// run CLELAB and add the result to result array
+					st_arr_results[group] = calc_CIE_Lab(arr[i]);
+					group++;
+					break;
 
-			case 2: /* CIE-L*v*u* Farbraumsystem */
-				if(b_print_titel)
-					print_sys_title(func_numb);
-				// run CLELUV and add the result to result array
-				st_arr_results[group] = calc_CIE_Luv(arr[i]);
-				group++;
-				break;
-		}
-		/* after each two CIE calculation, calculate ΔE */
-		if(group % 2 == 0 && (func_numb != 0) ){
-			calc_delta_e( st_arr_results[0].arr, st_arr_results[1].arr);
-			group = 0;
+				case 2: /* CIE-L*v*u* Farbraumsystem */
+					if(b_print_titel)
+						print_sys_title(func_numb);
+					// run CLELUV and add the result to result array
+					st_arr_results[group] = calc_CIE_Luv(arr[i]);
+					group++;
+					break;
+			}
+			/* after each two CIE calculation, calculate ΔE */
+			if(group % 2 == 0 && (func_numb != 0) ){
+				calc_delta_e( st_arr_results[0].arr, st_arr_results[1].arr);
+				group = 0;
+			}
 		}
 	}
 	// set print-system-title to True.
@@ -183,7 +185,7 @@ void calc_delta_e(double *param, double *param2)
 	delta_e =  sqrt( pow((param[2]-param2[2]), 2) +
 			         pow((param[1]-param2[1]), 2) +
 					 pow((param[0]-param2[0]), 2) );
-	printf("-> ΔE  = %.3f", delta_e);
+	printf("-> ΔE  = %.3f\n", delta_e);
 }
 
 /*
@@ -253,7 +255,7 @@ double **read_file()
 		if(j == 3){
 			i++;
 			j=0;
-			printf("\n");
+			//printf("\n");
 		}
 	}
 	fclose(file);
