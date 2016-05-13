@@ -42,7 +42,7 @@ void execute_color_system(int func_numb)
 	}
 
 	for ( j = 0; j < size-1; ++j) {
-		for ( i = j; i < size-1 ; i++) {
+		for ( i = j+1; i < size-1 ; i++) {
 			// print the group number
 			if(group == 0 && (func_numb != 0) && b_print_titel !=1 )
 				printf("\n\nGroup %d:", compare++);
@@ -60,6 +60,8 @@ void execute_color_system(int func_numb)
 					if(b_print_titel)
 						print_sys_title(func_numb);
 					// run CLELAB and add the result to result array
+					st_arr_results[group] = calc_CIE_Lab(arr[j]);
+					group++;
 					st_arr_results[group] = calc_CIE_Lab(arr[i]);
 					group++;
 					break;
