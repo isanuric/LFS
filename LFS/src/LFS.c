@@ -7,7 +7,7 @@
 #include "header.h"
 
 /* global variables */
-int size = 0;			// size of data array
+int size = 0;           // size of data array
 int b_print_titel = 1;	// print the title of color system
 int b_create_base = 1;  // the last 3 values in file: Xn Yn Zn
 int group = 0;
@@ -18,7 +18,7 @@ int group = 0;
 void do_CIE()
 {
 	int i;
-	print_header();    			// print program header
+	print_header();             // print program header
 	for ( i = 0; i < 3; ++i)    // execute automated the color systems
 		execute_color_system(i);
  }
@@ -34,8 +34,7 @@ void execute_color_system(int func_numb)
 	double **arr;
 
 	if(b_create_base){
-		arr = read_file(); // get user parameters
-		//arr = get_param(); // get user parameters
+		arr = read_file(); 		// get user parameters
 		Xn  = arr[size-1][0];
 		Yn  = arr[size-1][1];
 		Zn  = arr[size-1][2];
@@ -43,10 +42,11 @@ void execute_color_system(int func_numb)
 	}
 
 	for ( i = 0; i < size-1 ; i++) {
-
+		// print the group number
 		if(group == 0 && (func_numb != 0) && b_print_titel !=1 )
 			printf("\n\nGroup %d:", compare++);
 
+		// call the functions to calculate various color systems
 		switch(func_numb)
 		{
 			case 0: /* CIE-Normalvalenzsystem */
@@ -58,6 +58,7 @@ void execute_color_system(int func_numb)
 			case 1: /* CIE-L*a*b* Farbraumsystem */
 				if(b_print_titel)
 					print_sys_title(func_numb);
+				// run CLELAB and add the result to result array
 				st_arr_results[group] = calc_CIE_Lab(arr[i]);
 				group++;
 				break;
@@ -65,6 +66,7 @@ void execute_color_system(int func_numb)
 			case 2: /* CIE-L*v*u* Farbraumsystem */
 				if(b_print_titel)
 					print_sys_title(func_numb);
+				// run CLELUV and add the result to result array
 				st_arr_results[group] = calc_CIE_Luv(arr[i]);
 				group++;
 				break;
@@ -73,10 +75,10 @@ void execute_color_system(int func_numb)
 		if(group % 2 == 0 && (func_numb != 0) ){
 			calc_delta_e( st_arr_results[0].arr, st_arr_results[1].arr);
 			group = 0;
-
 		}
-
-	}b_print_titel = 1;
+	}
+	// set print-system-title to True.
+	b_print_titel = 1;
 }
 
 /*
@@ -149,7 +151,7 @@ struct_Stars calc_CIE_Lab(double *param)
 /*
  * CIE Luv
  * note: CIELUV is based on CIEUVW and is another
- * 		 attempt to define an encoding with uniformity
+ *       attempt to define an encoding with uniformity
  *  	 in the perceptibility of color differences
  */
 struct_Stars calc_CIE_Luv(double *param)
