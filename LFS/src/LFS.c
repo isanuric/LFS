@@ -266,7 +266,7 @@ double **read_file()
 	for ( var = 0; var < size; ++var){
 		printf("XYZ %d: ", var);
 		for ( j = 0; j < 3; ++j)
-					printf("%.3lf ", arr_input[var][j]);
+             printf("%.3lf ", arr_input[var][j]);
 		printf("\n");
 	}
 	printf("\n");
