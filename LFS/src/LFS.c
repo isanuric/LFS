@@ -47,7 +47,7 @@ void execute_color_system(int func_numb)
 			if(group == 0 && (func_numb != 0) && b_print_titel !=1 )
 				printf("\n\nGroup %d:", compare++);
 
-			// call the functions to calculate various color systems
+			// call the functions to calculate various color systems.
 			switch(func_numb)
 			{
 				case 0: /* CIE-Normalvalenzsystem */
