@@ -68,7 +68,7 @@ void execute_color_system(int func_numb)
 				case 2: /* CIE-L*v*u* Farbraumsystem */
 					if(b_print_titel)
 						print_sys_title(func_numb);
-					// run CLELUV and add the result to result array
+					// run CLELUV and add the results to result array
 					st_arr_results[group] = calc_CIE_Lab(arr[j]);
 					st_arr_results[group] = calc_CIE_Luv(arr[i]);
 					group = group + 2;
