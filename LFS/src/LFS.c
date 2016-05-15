@@ -61,17 +61,17 @@ void execute_color_system(int func_numb)
 						print_sys_title(func_numb);
 					// run CLELAB and add the result to result array
 					st_arr_results[group] = calc_CIE_Lab(arr[j]);
-					group++;
 					st_arr_results[group] = calc_CIE_Lab(arr[i]);
-					group++;
+					group = group + 2;
 					break;
 
 				case 2: /* CIE-L*v*u* Farbraumsystem */
 					if(b_print_titel)
 						print_sys_title(func_numb);
 					// run CLELUV and add the result to result array
+					st_arr_results[group] = calc_CIE_Lab(arr[j]);
 					st_arr_results[group] = calc_CIE_Luv(arr[i]);
-					group++;
+					group = group + 2;
 					break;
 			}
 			/* after each two CIE calculation, calculate ΔE */
