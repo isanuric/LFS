@@ -131,7 +131,7 @@ struct_Stars calc_CIE_Lab(double *param)
 		struct_lab.arr[1] = 200 * ( (841/108) * ( Y1_Yn - Z1_Zn ) ); // b
 	}
 
-	// calculate h_ab
+	// calculate h
 	h_ab = atan(struct_lab.arr[1]/struct_lab.arr[0]) * (180 / M_PI);  // radians into degree: (180 / M_PI)
 	if(lab[0] < 0)	{
 		if(struct_lab.arr[1] > 0)
