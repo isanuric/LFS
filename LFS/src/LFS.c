@@ -116,7 +116,7 @@ struct_Stars calc_CIE_Lab(double *param)
 	double X1_Xn, Y1_Yn, Z1_Zn, limit;
 	struct_Stars struct_lab;
 	double lab[3];
-	double b;
+
 	X1_Xn = param[0]/Xn;
 	Y1_Yn = param[1]/Yn;
 	Z1_Zn = param[2]/Zn;
